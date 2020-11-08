@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/chess/CLionProjects/Project 2/ImageMaker.h
+iostream
+-
+
+C:/Users/chess/CLionProjects/Project 2/main.cpp
+ImageMaker.h
+C:/Users/chess/CLionProjects/Project 2/ImageMaker.h
+iostream
+-
+vector
+-
+fstream
+-
+
