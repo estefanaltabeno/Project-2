@@ -56,7 +56,7 @@ void FileOut(string name)
 
     int sizeFile = (int)h.height * (int)h.height;
 
-    for (int i = 0; i < sizeFile; i++)
+    for (int i = 0; i < finalProd.size(); i++)
     {
         Pixel pixel = finalProd.at(i);
 
@@ -152,7 +152,7 @@ void ReadingData(string name, int n)
         }
     }
 
-    else if(n == 3)
+    else if (n == 3)
     {
         for (int i = 0; i < sizeFile; i++)
         {
@@ -167,25 +167,6 @@ void ReadingData(string name, int n)
             pixels3.push_back(pixel);
         }
     }
-
-    else if (n == 4)
-    {
-        for (int i = sizeFile; i > 0; i--)
-        {
-            file.seekg(sizeFile);
-
-            Pixel pixel;
-
-            file.read((char *)&pixel.blue, sizeof(pixel.blue));
-
-            file.read((char *)&pixel.green, sizeof(pixel.green));
-
-            file.read((char *)&pixel.red, sizeof(pixel.red));
-
-            pixels3.push_back(pixel);
-        }
-    }
-
 }
 
 Pixel Multiply(Pixel a, Pixel b)
@@ -414,26 +395,26 @@ void TestCase(string name)
 
         if (temp1.red != temp2.red)
         {
-            cout << "corect red " << (int)temp1.red << endl;
+            cout << "correct red " << (int)temp1.red << endl;
 
-            cout << "and corect red " << (int)temp2.red << endl;
+            cout << "My red " << (int)temp2.red << endl;
 
             check = false;
         }
         else if (temp1.green != temp2.green)
         {
 
-            cout << "corect green " << (int)temp1.green << endl;
+            cout << "correct green " << (int)temp1.green << endl;
 
-            cout << "and corect green " << (int)temp2.green << endl;
+            cout << "My green " << (int)temp2.green << endl;
 
             check = false;
         }
         else if (temp1.blue != temp2.blue)
         {
-            cout << "corect blue " << (int)temp1.blue << endl;
+            cout << "correct blue " << (int)temp1.blue << endl;
 
-            cout << "and corect blue " << (int)temp2.blue << endl;
+            cout << "My blue " << (int)temp2.blue << endl;
 
             check = false;
         }
@@ -446,7 +427,7 @@ void TestCase(string name)
 
     else
     {
-        cout << "Cap" << endl;
+        cout << "Cap." << endl;
     }
 }
 
@@ -520,25 +501,6 @@ int main()
     {
         finalProd.push_back(Multiply(pixels.at(i), pixels2.at(i)));
     }
-
-    /*
-
-    FileOut("temp.tga");
-
-    Clear();
-
-    ReadingData("text.tga", 0);
-
-    ReadingData("temp.tga", 1);
-
-    for(unsigned int i = 0; i < pixels.size(); i++)
-    {
-        finalProd.push_back(Screen(pixels.at(i), pixels2.at(i)));
-    }
-
-    FileOut("part3.tga");
-
-     */
 
     pixels.clear();
 
@@ -723,12 +685,16 @@ int main()
 
     Clear();
 
-    ReadingData("text2.tga", 4);
+    ReadingData("text2.tga", 0);
 
-    for (unsigned int i = 0; i < pixels.size(); i++)
+    unsigned int sizething = pixels.size() - 1;
+
+    for (unsigned int i = sizething; i > 0; i--)
     {
         finalProd.push_back(pixels.at(i));
     }
+
+    finalProd.push_back(pixels.at(0));
 
     FileOut("part10.tga");
 
