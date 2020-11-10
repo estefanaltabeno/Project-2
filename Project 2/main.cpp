@@ -14,9 +14,15 @@ vector<Pixel> pixels2;
 
 vector<Pixel> pixels3;
 
+vector<Pixel> pixels4;
+
 vector<Pixel> finalProd;
 
 vector<Pixel> testCasePixels;
+
+unsigned short extraCreditHeight = 0;
+
+unsigned short extraCreditWidth = 0;
 
 Header h;
 
@@ -48,9 +54,9 @@ void FileOut(string name)
 
     outFile.write(&h.imageDescriptor, sizeof(h.imageDescriptor));
 
-    int byteSize = sizeof(h.idLength) + sizeof(h.colorMapType) + sizeof(h.dataTypeCode) + sizeof(h.colorMapOrigin) + sizeof(h.colorMapLength) + sizeof(h.colorMapDepth) + sizeof(h.xOrigin) + sizeof(h.yOrigin) + sizeof(h.width) + sizeof(h.height) + sizeof(h.bitsPerPixel) + sizeof(h.imageDescriptor);
+    //int byteSize = sizeof(h.idLength) + sizeof(h.colorMapType) + sizeof(h.dataTypeCode) + sizeof(h.colorMapOrigin) + sizeof(h.colorMapLength) + sizeof(h.colorMapDepth) + sizeof(h.xOrigin) + sizeof(h.yOrigin) + sizeof(h.width) + sizeof(h.height) + sizeof(h.bitsPerPixel) + sizeof(h.imageDescriptor);
 
-    cout << byteSize << endl;
+    //cout << byteSize << endl;
 
     outFile.seekp(18);
 
@@ -97,9 +103,9 @@ void ReadingData(string name, int n)
 
     file.read(&h.imageDescriptor, sizeof(h.imageDescriptor));
 
-    int byteSize = sizeof(h.idLength) + sizeof(h.colorMapType) + sizeof(h.dataTypeCode) + sizeof(h.colorMapOrigin) + sizeof(h.xOrigin) + sizeof(h.yOrigin) + sizeof(h.width) + sizeof(h.height) + sizeof(h.bitsPerPixel) + sizeof(h.imageDescriptor);
+    //int byteSize = sizeof(h.idLength) + sizeof(h.colorMapType) + sizeof(h.dataTypeCode) + sizeof(h.colorMapOrigin) + sizeof(h.xOrigin) + sizeof(h.yOrigin) + sizeof(h.width) + sizeof(h.height) + sizeof(h.bitsPerPixel) + sizeof(h.imageDescriptor);
 
-    cout << byteSize << endl;
+    //cout << byteSize << endl;
 
     int sizeFile = (int)h.width * (int)h.height;
 
@@ -165,6 +171,22 @@ void ReadingData(string name, int n)
             file.read((char *)&pixel.red, sizeof(pixel.red));
 
             pixels3.push_back(pixel);
+        }
+    }
+
+    else if (n == 4)
+    {
+        for (int i = 0; i < sizeFile; i++)
+        {
+            Pixel pixel;
+
+            file.read((char *)&pixel.blue, sizeof(pixel.blue));
+
+            file.read((char *)&pixel.green, sizeof(pixel.green));
+
+            file.read((char *)&pixel.red, sizeof(pixel.red));
+
+            pixels4.push_back(pixel);
         }
     }
 }
@@ -461,6 +483,49 @@ Pixel Combine(Pixel a, int value)
     return temp;
 }
 
+void Loop()
+{
+    int cond = (int)h.width / 2;
+
+    int var = 0;
+
+    //This was all thanks to that picture labeling all of the pixels 0-... it was super helpful in visualization. Thank you Professor Fox!
+    //I feel very proud for coming up with this below and it was all on my own!
+    //My very own idea!
+
+    for (int i = 0; i < (int)h.height / 2; i++)
+    {
+        for (int z = 0; z < cond; z++)
+        {
+            finalProd.push_back(pixels4.at(z + var));
+        }
+
+        for (int j = 0; j < cond; j++)
+        {
+            finalProd.push_back(pixels3.at(j + var));
+        }
+
+        var += cond;
+    }
+
+    var = 0;
+
+    for (int i = 0; i < (int)h.height / 2; i++)
+    {
+        for (int z = 0; z < cond; z++)
+        {
+            finalProd.push_back(pixels.at(z + var));
+        }
+
+        for (int j = 0; j < cond; j++)
+        {
+            finalProd.push_back(pixels2.at(j + var));
+        }
+
+        var += cond;
+    }
+}
+
 int main()
 {
     ReadingData("layer1.tga" , 0);
@@ -699,6 +764,30 @@ int main()
     FileOut("part10.tga");
 
     TestCase("EXAMPLE_part10.tga");
+
+    Clear();
+
+    ReadingData("car.tga", 0);
+
+    ReadingData("circles.tga", 1);
+
+    ReadingData("pattern1.tga", 3);
+
+    ReadingData("text.tga", 4);
+
+    extraCreditWidth = 2 * (short)h.width;
+
+    extraCreditHeight = 2 * (short)h.height;
+
+    h.width = extraCreditWidth;
+
+    h.height = extraCreditHeight;
+
+    Loop();
+
+    FileOut("extracredit.tga");
+
+    TestCase("EXAMPLE_extracredit.tga");
 
     return 0;
 }

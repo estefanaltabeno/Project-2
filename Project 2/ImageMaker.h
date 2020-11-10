@@ -16,6 +16,7 @@ struct Header
     short height;
     char bitsPerPixel;
     char imageDescriptor;
+
 };
 
 struct Pixel
